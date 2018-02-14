@@ -1,0 +1,39 @@
+  # "Control/Compute"
+  config.vm.define "control3" do |server|
+    #server.vm.box = "rboyer/ubuntu-trusty64-libvirt" 14.04, java 7
+    #server.vm.box = "rboyer/ubuntu-xenial64-libvirt" no ssh
+    #server.vm.box = "wholebits/ubuntu16.04-64" no puppet
+    #server.vm.box = "bento/ubuntu-16.04" no libvirt
+    #server.vm.box = "yk0/ubuntu-xenial"
+    #server.vm.box = "ubuntu/xenial64"
+
+    #server.vm.box = "centos-7.3.virtualbox"
+    server.vm.hostname = "control3"
+
+    # Control node data network
+    server.vm.network "private_network",
+                      :libvirt__network_name => 'data_net',
+                      :libvirt__forward_mode => 'none',
+                      ip: DS_CONTROL3_DATA_IP,
+                      netmask: "255.255.255.0"
+
+    # Management/Control network
+    server.vm.network :public_network,
+                      :mode => 'bridge',
+                      :dev => 'em3',
+                      :type => 'direct',
+                      :trust_guest_rx_filters => 'true',
+                      ip: DS_CONTROL3_MGMT_IP,
+                      netmask: "255.255.255.0"
+
+    server.vm.provider "libvirt" do |lv|
+      lv.memory = 8192
+      lv.cpus = 4
+    end
+
+    server.vm.provision "puppet" do |puppet|
+      puppet.manifests_path = "puppet/manifests"
+      puppet.manifest_file  = "site.pp"
+      puppet.options = "--verbose --debug"
+    end
+  end

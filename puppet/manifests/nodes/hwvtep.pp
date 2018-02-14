@@ -1,0 +1,2 @@
+node hwvtep inherits hwvtepnode {}
+

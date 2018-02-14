@@ -1,2 +1,2 @@
-# ODL-lab
-Opendaylight SDN lab with 1 control node, 2 compute nodes
+# ODL-cluster-lab
+Three node ODL cluster running CentOs 7 and OVS 2.6.1
