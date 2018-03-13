@@ -83,7 +83,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                       netmask: "255.255.255.0"
 
     server.vm.provider "libvirt" do |lv|
-      lv.memory = 8096
+      lv.memory = 16096
       lv.cpus = 4
     end
 
@@ -123,7 +123,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                       netmask: "255.255.255.0"
 
     server.vm.provider "libvirt" do |lv|
-      lv.memory = 8192
+      lv.memory = 16192
       lv.cpus = 4
     end
 

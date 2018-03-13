@@ -1,0 +1,83 @@
+[[local|localrc]]
+# put the log files in a dir different than the source so they can be manipulated independently
+LOGFILE=/opt/stack/logs/stack.sh.log
+SCREEN_LOGDIR=/opt/stack/logs
+LOG_COLOR=False
+# flip OFFLINE and RECLONE to lock (RECLONE=no) or update the source.
+OFFLINE=True
+RECLONE=no
+#OFFLINE=False
+#RECLONE=yes
+VERBOSE=True
+
+# disable everything so we can explicitly enable only what we need
+disable_all_services
+
+# compute
+enable_service n-cpu odl-compute placement-client rabbit
+#NOVA_READY_TIMEOUT=1800
+
+HOST_IP=10.8.125.231
+SERVICE_HOST=10.8.125.230
+Q_ML2_TENANT_NETWORK_TYPE=vxlan
+#HOST_NAME=odl212
+#SERVICE_HOST_NAME=odl230
+
+Q_HOST=$SERVICE_HOST
+MYSQL_HOST=$SERVICE_HOST
+RABBIT_HOST=$SERVICE_HOST
+GLANCE_HOSTPORT=$SERVICE_HOST:9292
+KEYSTONE_AUTH_HOST=$SERVICE_HOST
+KEYSTONE_SERVICE_HOST=$SERVICE_HOST
+
+
+ODL_MODE=manual
+ODL_MGR_IP=10.8.125.230
+ODL_PORT=8080
+ODL_PORT_BINDING_CONTROLLER=pseudo-agentdb-binding
+ODL_OVS_MANAGERS=10.8.125.230
+ODL_V2DRIVER=True
+#ODL_USING_EXISTING_JAVA=False
+#ODL_JAVA_MAX_MEM=2048m
+
+SKIP_OVS_INSTALL=True
+
+VNCSERVER_PROXYCLIENT_ADDRESS=$HOST_IP
+VNCSERVER_LISTEN=0.0.0.0
+
+DATABASE_PASSWORD=mysql
+RABBIT_PASSWORD=rabbit
+QPID_PASSWORD=rabbit
+SERVICE_TOKEN=service
+SERVICE_PASSWORD=admin
+ADMIN_PASSWORD=admin
+
+
+enable_plugin networking-odl http://git.openstack.org/openstack/networking-odl stable/queens
+
+# use master for latest
+#BRANCH=stable/queens
+#BRANCH=master
+#GLANCE_BRANCH=$BRANCH
+#HORIZON_BRANCH=$BRANCH
+#KEYSTONE_BRANCH=$BRANCH
+#NOVA_BRANCH=$BRANCH
+#NEUTRON_BRANCH=$BRANCH
+#SWIFT_BRANCH=$BRANCH
+##CLIFF_BRANCH=$BRANCH
+##TEMPEST_BRANCH=$BRANCH
+#CINDER_BRANCH=$BRANCH
+#HEAT_BRANCH=$BRANCH
+#TROVE_BRANCH=$BRANCH
+#CEILOMETER_BRANCH=$BRANCH
+
+
+Q_L3_ENABLED=True
+ODL_L3=False
+
+[[post-config|/etc/nova/nova.conf]]
+[api]
+auth_strategy = keystone
+[DEFAULT]
+use_neutron = True
+force_raw_images = False
